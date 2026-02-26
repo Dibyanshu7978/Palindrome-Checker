@@ -1,0 +1,78 @@
+import java.util.*;
+
+// 1. Define the Strategy Interface
+interface PalindromeStrategy {
+    boolean isValid(String text);
+}
+
+// 2. Implementation: Stack-Based Strategy
+class StackStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isValid(String text) {
+        String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        Stack<Character> stack = new Stack<>();
+        for (char ch : clean.toCharArray()) stack.push(ch);
+        
+        StringBuilder reversed = new StringBuilder();
+        while (!stack.isEmpty()) reversed.append(stack.pop());
+        
+        return clean.equals(reversed.toString());
+    }
+}
+
+// 3. Implementation: Deque-Based Strategy
+class DequeStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isValid(String text) {
+        String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char ch : clean.toCharArray()) deque.addLast(ch);
+        
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) return false;
+        }
+        return true;
+    }
+}
+
+// 4. Main Application (The Context)
+public class UseCase12PalindromeCheckerApp {
+    private PalindromeStrategy strategy;
+
+    // Method to inject strategy at runtime
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void runCheck(String input) {
+        if (strategy.isValid(input)) {
+            System.out.println("Result: Success! It is a palindrome.");
+        } else {
+            System.out.println("Result: Failed. Not a palindrome.");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        UseCase12PalindromeCheckerApp app = new UseCase12PalindromeCheckerApp();
+
+        System.out.println("--- UC12: Strategy Pattern Palindrome Checker ---");
+        System.out.print("Enter text: ");
+        String input = scanner.nextLine();
+
+        System.out.println("Choose Strategy: 1. Stack | 2. Deque");
+        int choice = scanner.nextInt();
+
+        // Polymorphism in action: Injecting the chosen strategy
+        if (choice == 1) {
+            app.setStrategy(new StackStrategy());
+            System.out.println("Executing using Stack Strategy...");
+        } else {
+            app.setStrategy(new DequeStrategy());
+            System.out.println("Executing using Deque Strategy...");
+        }
+
+        app.runCheck(input);
+        scanner.close();
+    }
+}
