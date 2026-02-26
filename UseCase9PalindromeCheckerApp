@@ -1,0 +1,45 @@
+import java.util.Scanner;
+
+public class UseCase9PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- UC9: Recursive Palindrome Checker ---");
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+
+        // Pre-process: remove non-alphanumeric and convert to lowercase
+        String cleanText = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        if (checkRecursive(cleanText, 0, cleanText.length() - 1)) {
+            System.out.println("Result: '" + input + "' is a Palindrome.");
+        } else {
+            System.out.println("Result: '" + input + "' is NOT a Palindrome.");
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Recursive method to check palindrome status
+     * @param str The cleaned string
+     * @param start Current left index
+     * @param end Current right index
+     * @return true if palindrome, false otherwise
+     */
+    public static boolean checkRecursive(String str, int start, int end) {
+        // Base Case: If pointers cross or meet, it's a palindrome
+        if (start >= end) {
+            return true;
+        }
+
+        // Check if characters at current pointers match
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
+        }
+
+        // Recursive Call: Move inward
+        return checkRecursive(str, start + 1, end - 1);
+    }
+}
