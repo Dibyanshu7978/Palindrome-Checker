@@ -1,0 +1,47 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Scanner;
+
+public class UseCase7PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- UC7: Deque-Based Palindrome Checker ---");
+        System.out.print("Enter a string to check: ");
+        String input = scanner.nextLine();
+
+        if (isPalindrome(input)) {
+            System.out.println("Result: '" + input + "' is a Palindrome.");
+        } else {
+            System.out.println("Result: '" + input + "' is NOT a Palindrome.");
+        }
+
+        scanner.close();
+    }
+
+    public static boolean isPalindrome(String text) {
+        // Step 1: Clean the string (remove non-alphanumeric and lowercase)
+        String cleanText = text.replaceAll("[^a-zA-Z0-0]", "").toLowerCase();
+        
+        if (cleanText.isEmpty()) return true;
+
+        // Step 2: Initialize Deque and insert characters
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char ch : cleanText.toCharArray()) {
+            deque.addLast(ch);
+        }
+
+        // Step 3: Compare front and rear
+        while (deque.size() > 1) {
+            char first = deque.removeFirst();
+            char last = deque.removeLast();
+
+            if (first != last) {
+                return false; // Mismatch found
+            }
+        }
+
+        return true; // All pairs matched
+    }
+}
