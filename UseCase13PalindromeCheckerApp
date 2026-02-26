@@ -1,0 +1,75 @@
+import java.util.*;
+
+public class UseCase13PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- UC13: Palindrome Performance Comparison ---");
+        System.out.print("Enter a long string/phrase to benchmark: ");
+        String input = scanner.nextLine();
+        
+        // Normalize once to keep the benchmark fair
+        String cleanText = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        System.out.println("\nMeasuring Performance...\n");
+
+        // 1. Measure Two-Pointer Approach
+        long startTime = System.nanoTime();
+        checkTwoPointer(cleanText);
+        long endTime = System.nanoTime();
+        long durationTP = (endTime - startTime);
+
+        // 2. Measure Stack-Based Approach
+        startTime = System.nanoTime();
+        checkStack(cleanText);
+        endTime = System.nanoTime();
+        long durationStack = (endTime - startTime);
+
+        // 3. Measure Deque-Based Approach
+        startTime = System.nanoTime();
+        checkDeque(cleanText);
+        endTime = System.nanoTime();
+        long durationDeque = (endTime - startTime);
+
+        // Display Results
+        System.out.println("------------------------------------------------");
+        System.out.printf("%-20s | %-15s\n", "Algorithm", "Time (ns)");
+        System.out.println("------------------------------------------------");
+        System.out.printf("%-20s | %-15d\n", "Two-Pointer", durationTP);
+        System.out.printf("%-20s | %-15d\n", "Stack-Based", durationStack);
+        System.out.printf("%-20s | %-15d\n", "Deque-Based", durationDeque);
+        System.out.println("------------------------------------------------");
+
+        scanner.close();
+    }
+
+    // Two-Pointer Logic
+    public static boolean checkTwoPointer(String str) {
+        int left = 0, right = str.length() - 1;
+        while (left < right) {
+            if (str.charAt(left++) != str.charAt(right--)) return false;
+        }
+        return true;
+    }
+
+    // Stack Logic
+    public static boolean checkStack(String str) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch : str.toCharArray()) stack.push(ch);
+        for (char ch : str.toCharArray()) {
+            if (ch != stack.pop()) return false;
+        }
+        return true;
+    }
+
+    // Deque Logic
+    public static boolean checkDeque(String str) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char ch : str.toCharArray()) deque.addLast(ch);
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) return false;
+        }
+        return true;
+    }
+}
