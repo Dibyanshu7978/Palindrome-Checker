@@ -1,0 +1,42 @@
+import java.util.Scanner;
+
+public class Case-Insensitive & Space-Ignored Palindrome {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- UC10: Case-Insensitive & Space-Ignored Checker ---");
+        System.out.print("Enter a phrase: ");
+        String input = scanner.nextLine();
+
+        // Step 1: Normalization using Regular Expressions
+        // [^a-zA-Z0-9] means "match anything that is NOT a letter or a digit"
+        String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        // Step 2: Apply Two-Pointer logic for validation
+        if (isPalindrome(normalized)) {
+            System.out.println("Result: '" + input + "' is a Palindrome (Normalized).");
+        } else {
+            System.out.println("Result: '" + input + "' is NOT a Palindrome.");
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Efficient Two-Pointer comparison after normalization
+     */
+    public static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
