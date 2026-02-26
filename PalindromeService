@@ -1,0 +1,59 @@
+import java.util.Scanner;
+
+/**
+ * Service class that encapsulates Palindrome logic.
+ */
+class PalindromeService {
+    
+    /**
+     * Public method to check if a string is a palindrome.
+     * Uses internal normalization and comparison logic.
+     */
+    public boolean isPalindrome(String text) {
+        if (text == null) return false;
+        
+        // Internal Preprocessing
+        String clean = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        
+        // Using Two-Pointer logic internally
+        int left = 0;
+        int right = clean.length() - 1;
+        
+        while (left < right) {
+            if (clean.charAt(left) != clean.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+
+/**
+ * Main application class to handle User Input and Output.
+ */
+public class UseCase11PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Instantiate the Service Object
+        PalindromeService service = new PalindromeService();
+
+        System.out.println("--- UC11: Object-Oriented Palindrome Service ---");
+        System.out.print("Enter your text: ");
+        String input = scanner.nextLine();
+
+        // Calling the encapsulated method
+        boolean result = service.isPalindrome(input);
+
+        if (result) {
+            System.out.println("Result: '" + input + "' is a valid Palindrome.");
+        } else {
+            System.out.println("Result: '" + input + "' is NOT a Palindrome.");
+        }
+
+        scanner.close();
+    }
+}
