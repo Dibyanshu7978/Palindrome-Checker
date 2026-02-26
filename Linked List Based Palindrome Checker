@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+class Node {
+    char data;
+    Node next, prev;
+
+    Node(char data) {
+        this.data = data;
+    }
+}
+
+class CustomDeque {
+    private Node head, tail;
+    private int size = 0;
+
+    // Add to the back of the deque
+    public void addLast(char ch) {
+        Node newNode = new Node(ch);
+        if (tail == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+
+    // Remove from the front
+    public char removeFirst() {
+        char data = head.data;
+        head = head.next;
+        if (head != null) head.prev = null;
+        else tail = null;
+        size--;
+        return data;
+    }
+
+    // Remove from the back
+    public char removeLast() {
+        char data = tail.data;
+        tail = tail.prev;
+        if (tail != null) tail.next = null;
+        else head = null;
+        size--;
+        return data;
+    }
+
+    public int size() { return size; }
+}
+
+public class UseCase7PalindromeCheckerApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter string: ");
+        String input = scanner.nextLine();
+
+        if (isPalindrome(input)) {
+            System.out.println("Result: It is a Palindrome.");
+        } else {
+            System.out.println("Result: It is NOT a Palindrome.");
+        }
+        scanner.close();
+    }
+
+    public static boolean isPalindrome(String text) {
+        String cleanText = text.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        CustomDeque deque = new CustomDeque();
+
+        // Fill the custom deque
+        for (char ch : cleanText.toCharArray()) {
+            deque.addLast(ch);
+        }
+
+        // Compare from both ends
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
